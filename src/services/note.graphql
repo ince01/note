@@ -1,0 +1,12 @@
+query getNotes($limit: Int!, $offset: Int!) {
+  notes(limit: $limit, offset: $offset) {
+    id
+    title
+    content
+    createdBy {
+      id
+      firstName
+      lastName
+    }
+  }
+}

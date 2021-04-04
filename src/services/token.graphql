@@ -1,0 +1,13 @@
+mutation tokenCreate($userName: String!, $password: String!) {
+  tokenCreate(
+    userCredential: {
+      userName: $userName
+      password: $password
+      grantType: PASSWORD
+    }
+  ) {
+    accessToken
+    refreshToken
+    expiresIn
+  }
+}
