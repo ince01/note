@@ -69,7 +69,7 @@ const Note: FunctionComponent<NoteProps> = props => {
   };
 
   return (
-    <div className="py-3 px-3 max-w-2xl w-full rounded-lg border bg-white">
+    <div className="py-3 px-3 max-w-2xl w-full 2xl:max-w-screen-md rounded-3xl border bg-white">
       <form id={`note-form-${noteId}`} onSubmit={handleSubmit(submitHandler)}>
         <div className="flex flex-row ">
           <Title control={control} editMode={editMode} />

@@ -66,7 +66,7 @@ const Note: FunctionComponent<NoteProps> = props => {
       </div>
     </>
   ) : (
-    <div className="py-2 flex flex-row items-center justify-start">
+    <div className="flex flex-row items-center justify-start">
       <div className="px-1">
         <Button
           className="text-gray-400 border-none shadow-none "
