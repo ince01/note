@@ -71,7 +71,7 @@ export type NoteInput = {
   id?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   content: Scalars['String'];
-  createdBy: Scalars['ID'];
+  createdBy?: Maybe<Scalars['ID']>;
 };
 
 export type Query = {

@@ -12,14 +12,8 @@ const Home: React.FC = () => {
         {loading ? (
           <NoteSkeleton />
         ) : (
-          data?.notes.map(({ id, title, content, createdBy }) => (
-            <Note
-              key={id}
-              noteId={id}
-              title={title}
-              content={content}
-              createdBy={createdBy?.id}
-            />
+          data?.notes.map(({ id, title, content }) => (
+            <Note key={id} noteId={id} title={title} content={content} />
           ))
         )}
       </div>

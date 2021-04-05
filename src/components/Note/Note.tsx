@@ -13,7 +13,6 @@ export type NoteProps = {
   noteId: string;
   content?: string;
   title?: string;
-  createdBy?: string;
 };
 
 export interface INoteForm {
@@ -22,7 +21,7 @@ export interface INoteForm {
 }
 
 const Note: FunctionComponent<NoteProps> = props => {
-  const { noteId, content, title, createdBy } = props;
+  const { noteId, content, title } = props;
 
   const intl = useIntl();
 
@@ -49,12 +48,11 @@ const Note: FunctionComponent<NoteProps> = props => {
             id: noteId,
             title: data.title,
             content: data.content,
-            createdBy: createdBy ?? '',
           },
         },
       });
 
-      // toggleEditMode();
+      toggleEditMode();
 
       notification.success({
         message: intl.formatMessage({
