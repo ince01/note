@@ -18,11 +18,12 @@ const Key = ({ keyName }: { keyName: string }): JSX.Element => (
 
 export type NoteProps = {
   editMode: boolean;
+  loading?: boolean;
   onCancelBtnClick?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
 };
 
 const Note: FunctionComponent<NoteProps> = props => {
-  const { editMode, onCancelBtnClick = () => {} } = props;
+  const { editMode, onCancelBtnClick = () => {}, loading = false } = props;
 
   return editMode ? (
     <>
@@ -34,6 +35,7 @@ const Note: FunctionComponent<NoteProps> = props => {
             className="border-transparent shadow-none text-gray-400"
             size="small"
             shape="round"
+            disabled={loading}
             danger
             onClick={onCancelBtnClick}
           >
@@ -46,17 +48,19 @@ const Note: FunctionComponent<NoteProps> = props => {
         </div>
         <div>
           <Button
+            loading={loading}
+            htmlType="submit"
             size="small"
             shape="round"
             className="border-transparent shadow-none text-gray-400"
           >
-            <p>
+            <span>
               <FormattedMessage defaultMessage="Finish" />
               &nbsp;
               <Key keyName="⌘" />
               +
               <Key keyName="Enter" />
-            </p>
+            </span>
           </Button>
         </div>
       </div>

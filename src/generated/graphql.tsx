@@ -37,11 +37,16 @@ export enum GrantType {
 export type Mutation = {
   __typename?: 'Mutation';
   noteCreate: Note;
+  noteUpdate: Note;
   userCreate: User;
   tokenCreate: Token;
 };
 
 export type MutationNoteCreateArgs = {
+  note: NoteInput;
+};
+
+export type MutationNoteUpdateArgs = {
   note: NoteInput;
 };
 
@@ -63,6 +68,7 @@ export type Note = {
 };
 
 export type NoteInput = {
+  id?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   content: Scalars['String'];
   createdBy: Scalars['ID'];
@@ -140,6 +146,14 @@ export type GetNotesQuery = { __typename?: 'Query' } & {
   >;
 };
 
+export type UpdateNoteMutationVariables = Exact<{
+  note: NoteInput;
+}>;
+
+export type UpdateNoteMutation = { __typename?: 'Mutation' } & {
+  noteUpdate: { __typename?: 'Note' } & Pick<Note, 'id' | 'title' | 'content'>;
+};
+
 export type TokenCreateMutationVariables = Exact<{
   userName: Scalars['String'];
   password: Scalars['String'];
@@ -212,6 +226,57 @@ export type GetNotesLazyQueryHookResult = ReturnType<
 export type GetNotesQueryResult = Apollo.QueryResult<
   GetNotesQuery,
   GetNotesQueryVariables
+>;
+export const UpdateNoteDocument = gql`
+  mutation updateNote($note: NoteInput!) {
+    noteUpdate(note: $note) {
+      id
+      title
+      content
+    }
+  }
+`;
+export type UpdateNoteMutationFn = Apollo.MutationFunction<
+  UpdateNoteMutation,
+  UpdateNoteMutationVariables
+>;
+
+/**
+ * __useUpdateNoteMutation__
+ *
+ * To run a mutation, you first call `useUpdateNoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateNoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateNoteMutation, { data, loading, error }] = useUpdateNoteMutation({
+ *   variables: {
+ *      note: // value for 'note'
+ *   },
+ * });
+ */
+export function useUpdateNoteMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateNoteMutation,
+    UpdateNoteMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateNoteMutation, UpdateNoteMutationVariables>(
+    UpdateNoteDocument,
+    options,
+  );
+}
+export type UpdateNoteMutationHookResult = ReturnType<
+  typeof useUpdateNoteMutation
+>;
+export type UpdateNoteMutationResult = Apollo.MutationResult<UpdateNoteMutation>;
+export type UpdateNoteMutationOptions = Apollo.BaseMutationOptions<
+  UpdateNoteMutation,
+  UpdateNoteMutationVariables
 >;
 export const TokenCreateDocument = gql`
   mutation tokenCreate($userName: String!, $password: String!) {

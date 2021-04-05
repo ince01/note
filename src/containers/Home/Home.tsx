@@ -1,33 +1,30 @@
-import { Layout } from 'antd';
-import Note from 'components/Note';
+import Note, { NoteSkeleton } from 'components/Note';
 import { useGetNotesQuery } from 'generated/graphql';
 
-const { Content } = Layout;
-
-function Home() {
-  const { data } = useGetNotesQuery({ variables: { limit: 10, offset: 0 } });
+const Home: React.FC = () => {
+  const { data, loading } = useGetNotesQuery({
+    variables: { limit: 10, offset: 0 },
+  });
 
   return (
-    <Content id="main" className="bg-gray-50">
-      <div className="container mx-auto">
-        <div className="p-4 grid grid-cols-1 gap-6 justify-items-center">
-          {data?.notes.map?.(
-            ({
-              id,
-              title,
-              content,
-            }: {
-              id: string;
-              title: string;
-              content: string;
-            }) => (
-              <Note key={id} title={title} content={content} />
-            ),
-          )}
-        </div>
+    <div className="container mx-auto">
+      <div className="p-4 grid grid-cols-1 gap-6 justify-items-center">
+        {loading ? (
+          <NoteSkeleton />
+        ) : (
+          data?.notes.map(({ id, title, content, createdBy }) => (
+            <Note
+              key={id}
+              noteId={id}
+              title={title}
+              content={content}
+              createdBy={createdBy?.id}
+            />
+          ))
+        )}
       </div>
-    </Content>
+    </div>
   );
-}
+};
 
 export default Home;

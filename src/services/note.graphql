@@ -10,3 +10,18 @@ query getNotes($limit: Int!, $offset: Int!) {
     }
   }
 }
+
+input NoteInput {
+  id: String
+  title: String!
+  content: String!
+  createdBy: ID!
+}
+
+mutation updateNote($note: NoteInput!) {
+  noteUpdate(note: $note) {
+    id
+    title
+    content
+  }
+}

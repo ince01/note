@@ -4,11 +4,10 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Spin } from 'antd';
 import { ApolloProvider } from '@apollo/client';
 import AppLocales, { LocaleType, LangType } from 'translations';
-import AppLayout from 'components/AppLayout';
-import initApolloClient from './apolloConfig';
+import initApolloClient from 'configs/apollo.conf';
+import Routes from './Routes';
 
 const SignIn = lazy(() => import('./containers/SignIn'));
-const Home = lazy(() => import('./containers/Home'));
 
 const apoloClient = initApolloClient();
 
@@ -24,13 +23,7 @@ function App() {
           <Suspense fallback={<Spin />}>
             <Switch>
               <Route path="/sign-in" exact component={SignIn} />
-              <Route path="/">
-                <AppLayout>
-                  <Switch>
-                    <Route path="/home" component={Home} />
-                  </Switch>
-                </AppLayout>
-              </Route>
+              <Routes />
             </Switch>
           </Suspense>
         </Router>

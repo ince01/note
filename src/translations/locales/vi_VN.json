@@ -1,4 +1,10 @@
 {
+  "+qP8xV": [
+    {
+      "type": 0,
+      "value": "characters"
+    }
+  ],
   "2O2sfp": [
     {
       "type": 0,
@@ -23,6 +29,12 @@
       "value": "Password"
     }
   ],
+  "9us4lS": [
+    {
+      "type": 0,
+      "value": "Required email"
+    }
+  ],
   "CfJyjp": [
     {
       "type": 0,
@@ -35,6 +47,12 @@
       "value": "Sign in"
     }
   ],
+  "UnCjKF": [
+    {
+      "type": 0,
+      "value": "Update note successfully"
+    }
+  ],
   "acXalb": [
     {
       "type": 0,
@@ -45,6 +63,12 @@
     {
       "type": 0,
       "value": "Register"
+    }
+  ],
+  "iK4WNc": [
+    {
+      "type": 0,
+      "value": "Required Password"
     }
   ],
   "sy+pv5": [

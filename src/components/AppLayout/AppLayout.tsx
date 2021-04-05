@@ -2,7 +2,7 @@ import { Layout, Avatar, Button, Tooltip, Typography } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { FormattedMessage } from 'react-intl';
 
-const { Header, Sider } = Layout;
+const { Header, Sider, Content } = Layout;
 
 export const siderWidth = 54;
 export const siderMenuWidth = 300;
@@ -54,7 +54,9 @@ function AppLayout({ children }: AppLayoutProps) {
             <div />
             <Avatar />
           </Header>
-          <div style={{ marginTop: headerHeigth }}>{children}</div>
+          <Content className="bg-gray-50" style={{ marginTop: headerHeigth }}>
+            {children}
+          </Content>
         </Layout>
       </Layout>
     </div>

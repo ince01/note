@@ -1,11 +1,12 @@
 import { FunctionComponent } from 'react';
 import { Input } from 'antd';
+import { Controller, Control } from 'react-hook-form';
 import { useIntl, defineMessage } from 'react-intl';
 import marked from 'marked';
 
 export type ContentProps = {
   editMode: boolean;
-  value?: string;
+  control: Control;
 };
 
 const placeholderMess = defineMessage({
@@ -13,23 +14,37 @@ const placeholderMess = defineMessage({
 });
 
 const Content: FunctionComponent<ContentProps> = props => {
-  const { editMode, value } = props;
+  const { editMode, control } = props;
 
   const intl = useIntl();
 
-  return editMode ? (
-    <Input.TextArea
-      defaultValue={value}
-      bordered={false}
-      spellCheck="false"
-      showCount
-      autoSize={{ minRows: 4 }}
-      placeholder={intl.formatMessage(placeholderMess)}
-    />
-  ) : (
-    <div
-      className="py-1 px-3"
-      dangerouslySetInnerHTML={{ __html: marked(value ?? '') }}
+  return (
+    <Controller
+      name="content"
+      control={control}
+      render={({ onChange, value }) =>
+        editMode ? (
+          <Input.TextArea
+            value={value}
+            onChange={onChange}
+            bordered={false}
+            spellCheck="false"
+            showCount={{
+              formatter: ({ count }) =>
+                `${count} ${intl.formatMessage({
+                  defaultMessage: 'characters',
+                })}`,
+            }}
+            autoSize={{ minRows: 4 }}
+            placeholder={intl.formatMessage(placeholderMess)}
+          />
+        ) : (
+          <div
+            className="py-1 px-3"
+            dangerouslySetInnerHTML={{ __html: marked(value ?? '') }}
+          />
+        )
+      }
     />
   );
 };

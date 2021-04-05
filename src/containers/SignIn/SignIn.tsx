@@ -9,15 +9,12 @@ interface ISignInForm {
   password: string;
 }
 
-function SignIn() {
+function SignIn(): React.FunctionComponentElement<{}> {
   const intl = useIntl();
 
   const history = useHistory();
 
-  const { control, errors, handleSubmit } = useForm<ISignInForm>({
-    mode: 'onBlur',
-    defaultValues: { userName: '', password: '' },
-  });
+  const { control, errors, handleSubmit } = useForm<ISignInForm>();
 
   const [tokenCreateMutation, { loading }] = useTokenCreateMutation();
 
@@ -47,9 +44,9 @@ function SignIn() {
         </Typography.Title>
         <Typography.Text className="flex justify-center items-center text-center mb-3">
           Need an account?&nbsp;
-          <a href="https://my.supernotes.app/">
+          <Link to="/" component={Typography.Link}>
             <FormattedMessage defaultMessage="Register" />
-          </a>
+          </Link>
         </Typography.Text>
         <form
           className="ant-form ant-form-vertical"
@@ -62,6 +59,12 @@ function SignIn() {
             help={errors?.userName?.message}
           >
             <Controller
+              defaultValue=""
+              rules={{
+                required: intl.formatMessage({
+                  defaultMessage: 'Required email',
+                }),
+              }}
               as={
                 <Input
                   data-testid="email"
@@ -80,6 +83,12 @@ function SignIn() {
             help={errors?.password?.message}
           >
             <Controller
+              defaultValue=""
+              rules={{
+                required: intl.formatMessage({
+                  defaultMessage: 'Required Password',
+                }),
+              }}
               as={
                 <Input.Password
                   data-testid="password"
@@ -95,17 +104,17 @@ function SignIn() {
               control={control}
             />
           </Form.Item>
-          <div className="mb-6 -mt-3">
-            <Link to="/forgotpassword" className="forgotPass">
+          <div className="mb-6">
+            <Link to="/" component={Typography.Link}>
               <FormattedMessage defaultMessage="Forgot password ?" />
             </Link>
           </div>
           <Button
             loading={loading}
             data-testid="signin-button"
-            className="w-full"
             type="primary"
             htmlType="submit"
+            block
           >
             <FormattedMessage defaultMessage="Sign in" />
           </Button>
