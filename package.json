@@ -48,11 +48,10 @@
     "build": "craco build",
     "test": "craco test",
     "postinstall": "husky install",
-    "extract-messages:en": "formatjs extract 'src/**/*.tsx' --out-file src/translations/locales/en_US.extracted.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
-    "extract-messages:vi": "formatjs extract 'src/**/*.tsx' --out-file src/translations/locales/vi_VN.extracted.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
-    "compile-messages:en": "formatjs compile src/translations/locales/en_US.extracted.json --ast --out-file src/translations/locales/en_US.json",
-    "compile-messages:vi": "formatjs compile src/translations/locales/vi_VN.extracted.json --ast --out-file src/translations/locales/vi_VN.json",
-    "build-messages:dev": "yarn extract-messages:en && yarn extract-messages:vi && yarn compile-messages:en && yarn compile-messages:vi",
+    "extract-messages": "formatjs extract 'src/**/*.tsx' --out-file src/translations/locales/lang.extracted.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
+    "compile-messages:en": "formatjs compile src/translations/locales/lang.extracted.json --ast --out-file src/translations/locales/en_US.json",
+    "compile-messages:vi": "formatjs compile src/translations/locales/lang.extracted.json --ast --out-file src/translations/locales/vi_VN.json",
+    "build-messages:dev": "yarn extract-messages && yarn compile-messages:en && yarn compile-messages:vi",
     "generate": "graphql-codegen --config codegen.yml"
   },
   "lint-staged": {
