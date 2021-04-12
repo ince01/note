@@ -3,6 +3,7 @@ import { Input } from 'antd';
 import { Controller, Control } from 'react-hook-form';
 import { useIntl, defineMessage } from 'react-intl';
 import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
 
 export type ContentProps = {
   editMode: boolean;
@@ -40,7 +41,9 @@ const Content: FunctionComponent<ContentProps> = props => {
           />
         ) : (
           <div className="py-1 px-3">
-            <ReactMarkdown className="unreset">{value}</ReactMarkdown>
+            <ReactMarkdown plugins={[gfm]} className="unreset">
+              {value}
+            </ReactMarkdown>
           </div>
         )
       }

@@ -12,8 +12,14 @@ const Home: React.FC = () => {
         {loading ? (
           <NoteSkeleton />
         ) : (
-          data?.notes.map(({ id, title, content }) => (
-            <Note key={id} noteId={id} title={title} content={content} />
+          data?.notes.map(({ id, title, content, icon }) => (
+            <Note
+              key={id}
+              noteId={id}
+              title={title}
+              icon={icon}
+              content={content}
+            />
           ))
         )}
       </div>

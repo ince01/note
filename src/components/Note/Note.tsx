@@ -13,15 +13,17 @@ export type NoteProps = {
   noteId: string;
   content?: string;
   title?: string;
+  icon?: string;
 };
 
 export interface INoteForm {
   title: string;
+  icon: string;
   content: string;
 }
 
 const Note: FunctionComponent<NoteProps> = props => {
-  const { noteId, content, title } = props;
+  const { noteId, content, title, icon } = props;
 
   const intl = useIntl();
 
@@ -30,7 +32,7 @@ const Note: FunctionComponent<NoteProps> = props => {
   const toggleEditMode = () => setEditMode(prevState => !prevState);
 
   const { control, handleSubmit, reset } = useForm<INoteForm>({
-    defaultValues: { title, content },
+    defaultValues: { title, icon, content },
   });
 
   const [updateNoteMutation, { loading }] = useUpdateNoteMutation();
@@ -47,6 +49,7 @@ const Note: FunctionComponent<NoteProps> = props => {
           note: {
             id: noteId,
             title: data.title,
+            icon: data.icon,
             content: data.content,
           },
         },
@@ -71,18 +74,21 @@ const Note: FunctionComponent<NoteProps> = props => {
   return (
     <div className="py-3 px-3 max-w-2xl w-full 2xl:max-w-screen-md rounded-3xl border bg-white">
       <form id={`note-form-${noteId}`} onSubmit={handleSubmit(submitHandler)}>
-        <div className="flex flex-row ">
-          <Title control={control} editMode={editMode} />
-
-          <Tooltip title={intl.formatMessage({ defaultMessage: 'Edit' })}>
-            <Button
-              className="text-gray-400"
-              onClick={toggleEditMode}
-              size="small"
-              shape="circle"
-              icon={editMode ? <PlusOutlined /> : <EditOutlined />}
-            />
-          </Tooltip>
+        <div className="flex flex-row">
+          <div className="flex-grow">
+            <Title control={control} editMode={editMode} />
+          </div>
+          <div className="flex-grow-0">
+            <Tooltip title={intl.formatMessage({ defaultMessage: 'Edit' })}>
+              <Button
+                className="text-gray-400"
+                onClick={toggleEditMode}
+                size="small"
+                shape="circle"
+                icon={editMode ? <PlusOutlined /> : <EditOutlined />}
+              />
+            </Tooltip>
+          </div>
         </div>
         <Content editMode={editMode} control={control} />
         <Footer

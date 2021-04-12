@@ -62,15 +62,20 @@ export type Note = {
   __typename?: 'Note';
   id: Scalars['ID'];
   title: Scalars['String'];
+  icon: Scalars['String'];
   content: Scalars['String'];
-  createdBy?: Maybe<User>;
+  parent?: Maybe<Scalars['ID']>;
+  children?: Maybe<Note>;
+  createdBy: User;
   createdAt: Scalars['Time'];
 };
 
 export type NoteInput = {
-  id?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']>;
   title: Scalars['String'];
+  icon: Scalars['String'];
   content: Scalars['String'];
+  parent?: Maybe<Scalars['ID']>;
   createdBy?: Maybe<Scalars['ID']>;
 };
 
@@ -138,9 +143,13 @@ export type GetNotesQueryVariables = Exact<{
 
 export type GetNotesQuery = { __typename?: 'Query' } & {
   notes: Array<
-    { __typename?: 'Note' } & Pick<Note, 'id' | 'title' | 'content'> & {
-        createdBy?: Maybe<
-          { __typename?: 'User' } & Pick<User, 'id' | 'firstName' | 'lastName'>
+    { __typename?: 'Note' } & Pick<
+      Note,
+      'id' | 'title' | 'icon' | 'content'
+    > & {
+        createdBy: { __typename?: 'User' } & Pick<
+          User,
+          'id' | 'firstName' | 'lastName'
         >;
       }
   >;
@@ -151,7 +160,10 @@ export type UpdateNoteMutationVariables = Exact<{
 }>;
 
 export type UpdateNoteMutation = { __typename?: 'Mutation' } & {
-  noteUpdate: { __typename?: 'Note' } & Pick<Note, 'id' | 'title' | 'content'>;
+  noteUpdate: { __typename?: 'Note' } & Pick<
+    Note,
+    'id' | 'title' | 'icon' | 'content'
+  >;
 };
 
 export type TokenCreateMutationVariables = Exact<{
@@ -171,6 +183,7 @@ export const GetNotesDocument = gql`
     notes(limit: $limit, offset: $offset) {
       id
       title
+      icon
       content
       createdBy {
         id
@@ -232,6 +245,7 @@ export const UpdateNoteDocument = gql`
     noteUpdate(note: $note) {
       id
       title
+      icon
       content
     }
   }

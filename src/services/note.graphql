@@ -2,6 +2,7 @@ query getNotes($limit: Int!, $offset: Int!) {
   notes(limit: $limit, offset: $offset) {
     id
     title
+    icon
     content
     createdBy {
       id
@@ -22,6 +23,7 @@ mutation updateNote($note: NoteInput!) {
   noteUpdate(note: $note) {
     id
     title
+    icon
     content
   }
 }
