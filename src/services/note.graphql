@@ -12,18 +12,35 @@ query getNotes($limit: Int!, $offset: Int!) {
   }
 }
 
-input NoteInput {
-  id: String
-  title: String!
-  content: String!
-  createdBy: ID!
+mutation createNote($note: NoteCreateInput!) {
+  noteCreate(note: $note) {
+    id
+    title
+    icon
+    content
+    parent
+  }
 }
 
-mutation updateNote($note: NoteInput!) {
+input NoteCreateInput {
+  title: String!
+  icon: String!
+  content: String!
+  parent: ID
+}
+
+mutation updateNote($note: NoteUpdateInput!) {
   noteUpdate(note: $note) {
     id
     title
     icon
     content
   }
+}
+
+input NoteUpdateInput {
+  id: ID!
+  title: String
+  icon: String
+  content: String
 }
