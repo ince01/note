@@ -1,5 +1,5 @@
-query getNotes($limit: Int!, $offset: Int!) {
-  notes(limit: $limit, offset: $offset) {
+query getNotes($parent: Int, $limit: Int!, $offset: Int!) {
+  notes(parent: $parent, limit: $limit, offset: $offset) {
     id
     title
     icon
@@ -10,6 +10,32 @@ query getNotes($limit: Int!, $offset: Int!) {
       lastName
     }
   }
+}
+
+query getTree {
+  notes(limit: 1000, offset: 0) {
+    ...TreeNode
+    children {
+      ...TreeNode
+      children {
+        ...TreeNode
+        children {
+          ...TreeNode
+          children {
+            ...TreeNode
+            children {
+              ...TreeNode
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+fragment TreeNode on Note {
+  id
+  title
 }
 
 mutation createNote($note: NoteCreateInput!) {

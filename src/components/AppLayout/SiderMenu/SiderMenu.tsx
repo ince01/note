@@ -6,6 +6,7 @@ import {
   BulbOutlined,
 } from '@ant-design/icons';
 import { memo } from 'react';
+import { useSiderMenu } from './SiderMenuContext';
 
 export interface SiderMenuProps {
   width?: string | number;
@@ -13,6 +14,8 @@ export interface SiderMenuProps {
 }
 
 const SiderMenu: React.FC<SiderMenuProps> = ({ width, left }) => {
+  const { treeData, activeNode, onNodeSelect } = useSiderMenu();
+
   return (
     <Layout.Sider
       className="overflow-hidden h-screen fixed left-0 border bg-gray-50 border-gray-200 border-solid"
@@ -53,7 +56,9 @@ const SiderMenu: React.FC<SiderMenuProps> = ({ width, left }) => {
         className="bg-transparent px-4"
         switcherIcon={<DownOutlined />}
         blockNode
-        treeData={[]}
+        selectedKeys={activeNode}
+        onSelect={onNodeSelect}
+        treeData={treeData}
       />
     </Layout.Sider>
   );

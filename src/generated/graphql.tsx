@@ -96,6 +96,7 @@ export type QueryNoteArgs = {
 };
 
 export type QueryNotesArgs = {
+  parent?: Maybe<Scalars['Int']>;
   limit: Scalars['Int'];
   offset: Scalars['Int'];
 };
@@ -142,6 +143,7 @@ export type UserInput = {
 };
 
 export type GetNotesQueryVariables = Exact<{
+  parent?: Maybe<Scalars['Int']>;
   limit: Scalars['Int'];
   offset: Scalars['Int'];
 }>;
@@ -159,6 +161,39 @@ export type GetNotesQuery = { __typename?: 'Query' } & {
       }
   >;
 };
+
+export type GetTreeQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetTreeQuery = { __typename?: 'Query' } & {
+  notes: Array<
+    { __typename?: 'Note' } & {
+      children: Array<
+        { __typename?: 'Note' } & {
+          children: Array<
+            { __typename?: 'Note' } & {
+              children: Array<
+                { __typename?: 'Note' } & {
+                  children: Array<
+                    { __typename?: 'Note' } & {
+                      children: Array<
+                        { __typename?: 'Note' } & TreeNodeFragment
+                      >;
+                    } & TreeNodeFragment
+                  >;
+                } & TreeNodeFragment
+              >;
+            } & TreeNodeFragment
+          >;
+        } & TreeNodeFragment
+      >;
+    } & TreeNodeFragment
+  >;
+};
+
+export type TreeNodeFragment = { __typename?: 'Note' } & Pick<
+  Note,
+  'id' | 'title'
+>;
 
 export type CreateNoteMutationVariables = Exact<{
   note: NoteCreateInput;
@@ -194,9 +229,15 @@ export type TokenCreateMutation = { __typename?: 'Mutation' } & {
   >;
 };
 
+export const TreeNodeFragmentDoc = gql`
+  fragment TreeNode on Note {
+    id
+    title
+  }
+`;
 export const GetNotesDocument = gql`
-  query getNotes($limit: Int!, $offset: Int!) {
-    notes(limit: $limit, offset: $offset) {
+  query getNotes($parent: Int, $limit: Int!, $offset: Int!) {
+    notes(parent: $parent, limit: $limit, offset: $offset) {
       id
       title
       icon
@@ -222,6 +263,7 @@ export const GetNotesDocument = gql`
  * @example
  * const { data, loading, error } = useGetNotesQuery({
  *   variables: {
+ *      parent: // value for 'parent'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *   },
@@ -255,6 +297,72 @@ export type GetNotesLazyQueryHookResult = ReturnType<
 export type GetNotesQueryResult = Apollo.QueryResult<
   GetNotesQuery,
   GetNotesQueryVariables
+>;
+export const GetTreeDocument = gql`
+  query getTree {
+    notes(limit: 1000, offset: 0) {
+      ...TreeNode
+      children {
+        ...TreeNode
+        children {
+          ...TreeNode
+          children {
+            ...TreeNode
+            children {
+              ...TreeNode
+              children {
+                ...TreeNode
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  ${TreeNodeFragmentDoc}
+`;
+
+/**
+ * __useGetTreeQuery__
+ *
+ * To run a query within a React component, call `useGetTreeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTreeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTreeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetTreeQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetTreeQuery, GetTreeQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetTreeQuery, GetTreeQueryVariables>(
+    GetTreeDocument,
+    options,
+  );
+}
+export function useGetTreeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetTreeQuery,
+    GetTreeQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetTreeQuery, GetTreeQueryVariables>(
+    GetTreeDocument,
+    options,
+  );
+}
+export type GetTreeQueryHookResult = ReturnType<typeof useGetTreeQuery>;
+export type GetTreeLazyQueryHookResult = ReturnType<typeof useGetTreeLazyQuery>;
+export type GetTreeQueryResult = Apollo.QueryResult<
+  GetTreeQuery,
+  GetTreeQueryVariables
 >;
 export const CreateNoteDocument = gql`
   mutation createNote($note: NoteCreateInput!) {

@@ -1,9 +1,12 @@
 import Note, { NoteSkeleton } from 'components/Note';
 import { useGetNotesQuery } from 'generated/graphql';
+import { useParams } from 'react-router-dom';
 
 const Home: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+
   const { data, loading } = useGetNotesQuery({
-    variables: { limit: 10, offset: 0 },
+    variables: { limit: 10, offset: 0, parent: parseInt(id, 10) },
   });
 
   return (
@@ -12,15 +15,7 @@ const Home: React.FC = () => {
         {loading ? (
           <NoteSkeleton />
         ) : (
-          data?.notes.map(({ id, title, content, icon }) => (
-            <Note
-              key={id}
-              noteId={id}
-              title={title}
-              icon={icon}
-              content={content}
-            />
-          ))
+          data?.notes.map(note => <Note key={note.id} note={note} />)
         )}
       </div>
     </div>

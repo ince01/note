@@ -3,6 +3,7 @@ import { Switch, RouteProps } from 'react-router-dom';
 import Loading from 'components/Loading';
 import AppLayout from 'components/AppLayout';
 import PrivateRoute from 'components/PrivateRoute';
+import { SiderMenuProvider } from 'components/AppLayout/SiderMenu/SiderMenuContext';
 
 type RouteWithKeyProps = RouteProps & {
   id: string;
@@ -10,13 +11,8 @@ type RouteWithKeyProps = RouteProps & {
 
 const routes: RouteWithKeyProps[] = [
   {
-    id: 'home',
-    path: '/',
-    component: lazy(() => import('containers/Home')),
-  },
-  {
-    id: 'home',
-    path: '/as',
+    id: 'notes',
+    path: '/:id',
     exact: true,
     component: lazy(() => import('containers/Home')),
   },
@@ -24,14 +20,16 @@ const routes: RouteWithKeyProps[] = [
 
 export default function AppRouter(): React.FunctionComponentElement<{}> {
   return (
-    <AppLayout>
-      <Suspense fallback={<Loading />}>
-        <Switch>
-          {routes.map(route => (
-            <PrivateRoute key={route.id} {...route} />
-          ))}
-        </Switch>
-      </Suspense>
-    </AppLayout>
+    <SiderMenuProvider>
+      <AppLayout>
+        <Suspense fallback={<Loading />}>
+          <Switch>
+            {routes.map(route => (
+              <PrivateRoute key={route.id} {...route} />
+            ))}
+          </Switch>
+        </Suspense>
+      </AppLayout>
+    </SiderMenuProvider>
   );
 }

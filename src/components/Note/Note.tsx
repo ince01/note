@@ -1,19 +1,15 @@
 import { FunctionComponent, useState } from 'react';
-import { Button, Tooltip, notification } from 'antd';
-import { EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { notification } from 'antd';
 import { useIntl } from 'react-intl';
 import { useForm } from 'react-hook-form';
-import { useUpdateNoteMutation } from 'generated/graphql';
+import { useUpdateNoteMutation, Note as NoteType } from 'generated/graphql';
 
-import Title from './Title';
+import Header from './Header';
 import Content from './Content';
 import Footer from './Footer';
 
 export type NoteProps = {
-  noteId: string;
-  content?: string;
-  title?: string;
-  icon?: string;
+  note: Pick<NoteType, 'id' | 'title' | 'icon' | 'content'>;
 };
 
 export interface INoteForm {
@@ -22,14 +18,16 @@ export interface INoteForm {
   content: string;
 }
 
-const Note: FunctionComponent<NoteProps> = props => {
-  const { noteId, content, title, icon } = props;
+const Note: FunctionComponent<NoteProps> = ({ note }) => {
+  const { id, content, title, icon } = note;
 
   const intl = useIntl();
 
   const [editMode, setEditMode] = useState(false);
 
-  const toggleEditMode = () => setEditMode(prevState => !prevState);
+  const toggleEditMode: () => void = () => {
+    setEditMode(prevState => !prevState);
+  };
 
   const { control, handleSubmit, reset } = useForm<INoteForm>({
     defaultValues: { title, icon, content },
@@ -47,7 +45,7 @@ const Note: FunctionComponent<NoteProps> = props => {
       await updateNoteMutation({
         variables: {
           note: {
-            id: noteId,
+            id,
             title: data.title,
             icon: data.icon,
             content: data.content,
@@ -73,23 +71,12 @@ const Note: FunctionComponent<NoteProps> = props => {
 
   return (
     <div className="py-3 px-3 max-w-2xl w-full 2xl:max-w-screen-md rounded-3xl border bg-white">
-      <form id={`note-form-${noteId}`} onSubmit={handleSubmit(submitHandler)}>
-        <div className="flex flex-row">
-          <div className="flex-grow">
-            <Title control={control} editMode={editMode} />
-          </div>
-          <div className="flex-grow-0">
-            <Tooltip title={intl.formatMessage({ defaultMessage: 'Edit' })}>
-              <Button
-                className="text-gray-400"
-                onClick={toggleEditMode}
-                size="small"
-                shape="circle"
-                icon={editMode ? <PlusOutlined /> : <EditOutlined />}
-              />
-            </Tooltip>
-          </div>
-        </div>
+      <form id={`note-form-${id}`} onSubmit={handleSubmit(submitHandler)}>
+        <Header
+          control={control}
+          editMode={editMode}
+          onBtnClick={toggleEditMode}
+        />
         <Content editMode={editMode} control={control} />
         <Footer
           loading={loading}
